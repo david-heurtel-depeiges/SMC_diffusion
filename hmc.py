@@ -1,5 +1,6 @@
 """ Adapted from https://github.com/modichirag/VBS/blob/main/src/pyhmc.py """
 """ Code from AstroDDPM package (non released) """
+
 import numpy as np
 import torch
 from tqdm import tqdm
@@ -62,8 +63,6 @@ class DualAveragingStepSize():
         else:
             step_size = torch.exp(self.log_averaged_step)
         return step_size
-    
-
 
 class HMC():
     """ Hamiltonian Monte Carlo Sampler"""

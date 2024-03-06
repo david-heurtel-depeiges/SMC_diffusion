@@ -61,8 +61,7 @@ class ExactScoreNetwork(nn.Module):
         log_prob = self.log_prob(x, t)
         grad_log_prob = torch.autograd.grad(log_prob.sum(), x, create_graph=True)[0]
         Beta_t = self.Beta(t).reshape(-1, 1)
-        return - torch.sqrt(1 - torch.exp(-Beta_t)) * grad_log_prob
-    
+        return - torch.sqrt(1 - torch.exp(-Beta_t)) * grad_log_prob   
 
 class ContinuousSDE(abc.ABC):
     def __init__(self):
@@ -203,7 +202,6 @@ class ContinuousVPSDE(ContinuousSDE):
         else:
             raise NotImplementedError('The beta schedule {} is not implemented'.format(self.beta_schedule))
         
-
 class DiffusionModel(nn.Module):
     def __init__(self, sde, network):
         super(DiffusionModel, self).__init__()
@@ -219,7 +217,6 @@ class DiffusionModel(nn.Module):
     def ddim(self, sample_size, channel, size, schedule):
         raise NotImplementedError
     
-
 def get_schedule(schedule_type, **kwargs):
     """
     Returns a schedule of time steps for a differential equation solver (SDE or ODE)
@@ -329,7 +326,8 @@ class EulerMaruyama():
             x = x.detach()
             progress_bar.update(1)
         if reverse_time:
-            times = x.flip(0) ## flip back to the original time order (to avoid side effects)
+            ## flip back to the original time order (to avoid side effects)
+            times = x.flip(1)
         return x
     
 
