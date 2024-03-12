@@ -59,7 +59,7 @@ class DualAveragingStepSize():
             step_size, avgstepsize = self.update(p_accept)
         elif i == self.nadapt:
             _, step_size = self.update(p_accept)
-            print("\nStep size fixed to : %0.3e\n" % step_size)
+            #print("\nStep size fixed to : %0.3e\n" % step_size)
         else:
             step_size = torch.exp(self.log_averaged_step)
         return step_size
@@ -312,9 +312,11 @@ class HMC():
         Returns:
             (torch.Tensor, torch.Tensor): Updated position vector, step size.
         """
-        print("Adapting step size using %d iterations" % epsadapt)
+        if verbose:
+            print("Adapting step size using %d iterations" % epsadapt)
         epsadapt_kernel = DualAveragingStepSize(step_size)
-
+        if verbose:
+            print("Step size initialized to : ", step_size)
         q_list = [] # We save the positions to estimate the inverse mass matrix at half the iterations
         
         for i in tqdm(range((epsadapt)), disable=not verbose):
@@ -330,7 +332,8 @@ class HMC():
                 step_size, avgstepsize = epsadapt_kernel.update(prob)
             elif i == epsadapt - 1:
                 _, step_size = epsadapt_kernel.update(prob)
-                print("Step size fixed to : ", step_size)
+                if verbose:
+                    print("Step size fixed to : ", step_size)
 
             # Estimate the inverse mass matrix
             if i == 3*epsadapt//4:

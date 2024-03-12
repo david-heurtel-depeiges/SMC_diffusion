@@ -311,7 +311,7 @@ class EulerMaruyama():
             times = self.schedule
         x = x_init
 
-        progress_bar = tqdm.tqdm(total = len(times)-1, disable=not verbose)
+        progress_bar = tqdm.tqdm(total = times.shape[1], disable=not verbose)
         for i in range(times.shape[1]-1):
             dt = (times[:,i+1] - times[:,i]).reshape(-1,1)
             timesteps = times[:,i].to(x.device).unsqueeze(1)
