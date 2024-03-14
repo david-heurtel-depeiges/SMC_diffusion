@@ -6,6 +6,7 @@
 
 import torch
 import torch.fft as fft
+import numpy as np
 
 def pad_kernel(k, ksize):
     pad_values = (ksize[0] - k.shape[-2]) // 2, (ksize[1] - k.shape[-1]) // 2
@@ -32,6 +33,13 @@ def p2o(psf, shape):
     for axis, axis_size in enumerate(psf.shape[2:]):
         otf = torch.roll(otf, -int(axis_size / 2), dims=axis+2)
     return otf
+
+def tensor2uint(img):
+    img = img.data.squeeze().float().clamp_(0, 1).cpu().numpy()
+    if img.ndim == 3:
+        img = np.transpose(img, (1, 2, 0))
+    return np.uint8((img*255.0).round())
+
 
 def fft_blur(img, k):
     k = p2o(k, img.shape[-2:])
