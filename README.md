@@ -9,7 +9,7 @@ Joint project work with Simon Queric
 
 
 <figure>
-  <img style="float:none;" width="800" height="170" src="./TDS_images/figures/tds_sampling.png" alt="TDS sampling">
+  <img style="float:none;" width="720" height="240" src="./TDS_images/figures/tds_sampling.png" alt="TDS sampling">
   <figcaption> TDS sampling for super-resolution. </figcaption>
 </figure>
 
