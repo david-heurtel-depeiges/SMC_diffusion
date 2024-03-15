@@ -6,7 +6,7 @@ Joint project work with Simon Queric
 ### `MCGDiff_GMM`: Monte Carlo Guided Diffusion for bayesian linear inverse problems on a Gaussian Mixture Model
 
 <figure>
- <img style="float:none;", width="720" height="240" src="./MCGDiff_GMM/figures/inpainting_gmm.png" alt="MCGDiff sampling">
+ <img style="float:none;", width="720" height="300" src="./MCGDiff_GMM/figures/inpainting_gmm.png" alt="MCGDiff sampling">
  <figcaption> MCGDiff for inpainting </figcaption>
 </figure>
 
