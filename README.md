@@ -4,6 +4,12 @@ Joint project work with Simon Queric
 
 ## Structure of the repository
 ### `MCGDiff_GMM`: Monte Carlo Guided Diffusion for bayesian linear inverse problems on a Gaussian Mixture Model
+
+<figure>
+ <img style="float:none;", width="720" height="240" src="./MCGDiff_GMM/figures/inpainting_gmm.png" alt="MCGDiff sampling">
+ <figcaption> MCGDiff for inpainting </figcaption>
+</figure>
+
 ### `TDS_GMM`: Twisted Diffusion Sampling for (blind) inverse problems on a Gaussian Mixture Model
 ### `TDS_images`: Twisted Diffusion Sampling for (blind) inverse problems on images
 
