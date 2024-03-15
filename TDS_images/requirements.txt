@@ -1,0 +1,10 @@
+torch 
+numpy 
+tqdm
+matplotlib
+pathlib
+torchvision
+diffusers
+datasets
+PIL
+scipy

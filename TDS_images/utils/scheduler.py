@@ -30,6 +30,46 @@ from diffusers.schedulers.scheduling_utils import SchedulerMixin, KarrasDiffusio
 from diffusers.utils.torch_utils import randn_tensor
 
 
+def alpha_beta(scheduler, t):
+    prev_t = scheduler.previous_timestep(t)
+    alpha_prod_t = scheduler.alphas_cumprod[t]
+    alpha_prod_t_prev = scheduler.alphas_cumprod[prev_t] if prev_t >= 0 else scheduler.one
+    current_alpha_t = alpha_prod_t / alpha_prod_t_prev
+    current_beta_t = 1 - current_alpha_t
+    current_alpha_prod_t = alpha_prod_t
+    next_alpha_prod_t = alpha_prod_t_prev
+    return current_alpha_t, current_beta_t, current_alpha_prod_t, next_alpha_prod_t
+
+def scheduler_alpha_t(scheduler, t):
+    # Get \bar\alpha_t and \alpha_t from scheduler
+    #   t should be an integer between 0 and T
+    #   T = scheduler.num_train_timesteps # 1000
+    prev_t = scheduler.previous_timestep(t)
+    alpha_prod_t = scheduler.alphas_cumprod[t]
+    alpha_prod_t_prev = scheduler.alphas_cumprod[prev_t] if prev_t >= 0 else scheduler.one
+    #beta_prod_t = 1 - alpha_prod_t
+    #beta_prod_t_prev = 1 - alpha_prod_t_prev
+    current_alpha_t = alpha_prod_t / alpha_prod_t_prev
+    #current_beta_t = 1 - current_alpha_t
+    return alpha_prod_t, current_alpha_t
+
+def scheduler_alphas(scheduler):
+    T = scheduler.num_inference_steps # 1000
+    stride=1
+    n = T #math.ceil((T+1)/stride)
+    alpha = torch.zeros(n)
+    alpha_bar = torch.zeros(n)
+    time = torch.zeros(n)
+    for t in range(0,T,stride):
+        alpha_prod_t, current_alpha_t = scheduler_alpha_t(scheduler, t)
+        #beta_prod_t = 1 - alpha_prod_t
+        #current_beta_t = 1 - current_alpha_t
+        #bt = current_beta_t / torch.sqrt(current_alpha_t)
+        alpha[t] = current_alpha_t
+        alpha_bar[t] = alpha_prod_t
+        time[t] = t
+    return alpha, alpha_bar, time
+
 @dataclass
 class NewDDPMSchedulerOutput(BaseOutput):
     """

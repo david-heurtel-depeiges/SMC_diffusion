@@ -1,11 +1,20 @@
 # Sequential Monte Carlo Sampling of Diffusion Models
 
-## SMC for blind inverse problems
-### TDS
-### MCGDiff
+Joint project work with Simon Queric
 
-## Requirements 
+## Structure of the repository
+### `MCGDiff_GMM`: Monte Carlo Guided Diffusion for bayesian linear inverse problems on a Gaussian Mixture Model
+### `TDS_GMM`: Twisted Diffusion Sampling for (blind) inverse problems on a Gaussian Mixture Model
+### `TDS_images`: Twisted Diffusion Sampling for (blind) inverse problems on images
 
+
+<figure>
+  <img style="float:none;" width="800" height="170" src="./TDS_images/figures/tds_sampling.pdf" alt="TDS sampling">
+  <figcaption> TDS sampling for super-resolution. </figcaption>
+</figure>
+
+## Requirements
+Depending on the specific folder, the requirements are different. 
 ## References
 
 [1] G. Cardoso, Y. J. E. Idrissi, S. L. Corff, and E. Moulines. Monte carlo guided diffusion for
