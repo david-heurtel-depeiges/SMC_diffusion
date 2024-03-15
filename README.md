@@ -19,6 +19,14 @@ Joint project work with Simon Queric
   <figcaption> TDS sampling for super-resolution. </figcaption>
 </figure>
 
+### `TDS_cosmo`: Twisted Diffusion Sampling for a cosmological component separation problem
+
+
+<figure>
+  <img style="float:none;" width="720" height="240" src="./TDS_cosmo/figures/inference_mixture_0.20.png" alt="TDS sampling">
+  <figcaption> TDS sampling for component separation. </figcaption>
+</figure>
+
 ## Requirements
 Depending on the specific folder, the requirements are different. 
 ## References
