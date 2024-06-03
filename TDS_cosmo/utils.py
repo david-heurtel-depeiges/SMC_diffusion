@@ -67,16 +67,50 @@ def log_prior_phi(phi):
     return logp
 
 
-def log_likelihood_eps_phi_sigma(phi, eps, sigma_2, ps_model):
+# def log_likelihood_eps_phi_sigma(phi, eps, sigma_2_y, sigma_2_regularization, ps_model):
+#     """
+#     Compute the log likelihood of the Gaussian model (epsilon | phi).
+#     """
+#     eps_dim = eps.shape[-1]*eps.shape[-2]
+#     ps = ps_model(phi)
+#     xf = torch.fft.fft2(eps)
+#     sigma_2_y = sigma_2_y.reshape(-1,1,1)
+#     sigma_2_regularization = sigma_2_regularization.reshape(-1,1,1)
+
+#     term_pi = -(eps_dim/2) * np.log(2*np.pi)
+#     term_logdet = -0.5 * torch.sum(torch.log(sigma_2_y*ps+sigma_2_regularization), dim=(-1, -2)) # The determinant is the product of the diagonal elements of the PS
+#     term_x = -0.5 * torch.sum((torch.abs(xf).pow(2)) / (sigma_2_y*ps+sigma_2_regularization), dim=(-1, -2, -3))/eps_dim # We divide by eps_dim because of the normalization of the FFT
+#     return term_pi + term_logdet + term_x
+
+def log_likelihood_eps_phi_sigma(phi, eps, sigma_2_y, rescaling, ps_model, sigma_2_rescaling=1):
     """
     Compute the log likelihood of the Gaussian model (epsilon | phi).
     """
     eps_dim = eps.shape[-1]*eps.shape[-2]
     ps = ps_model(phi)
     xf = torch.fft.fft2(eps)
-    sigma_2 = sigma_2.reshape(-1,1,1)
+    sigma_2_y = sigma_2_y.reshape(-1,1,1)
+    rescaling = rescaling.reshape(-1,1,1)
+    sigma_2_rescaling = sigma_2_rescaling.reshape(-1,1,1)
 
     term_pi = -(eps_dim/2) * np.log(2*np.pi)
-    term_logdet = -0.5 * torch.sum(torch.log(sigma_2*ps), dim=(-1, -2)) # The determinant is the product of the diagonal elements of the PS
-    term_x = -0.5 * torch.sum((torch.abs(xf).pow(2)) / (sigma_2*ps), dim=(-1, -2, -3))/eps_dim # We divide by eps_dim because of the normalization of the FFT
+    #print(sigma_2_y.shape, ps.shape, rescaling.shape, sigma_2_rescaling.shape)
+    term_logdet = -0.5 * torch.sum(torch.log(sigma_2_y*ps*(1-rescaling)+rescaling*sigma_2_rescaling), dim=(-1, -2)) # The determinant is the product of the diagonal elements of the PS
+    term_x = -0.5 * torch.sum((torch.abs(xf).pow(2)) / (sigma_2_y*ps*(1-rescaling)+rescaling*sigma_2_rescaling), dim=(-1, -2, -3))/eps_dim # We divide by eps_dim because of the normalization of the FFT
+    return term_pi + term_logdet + term_x
+
+
+def log_likelihood_eps_phi_sigma_v2(phi, eps, sigma_2_y, rescaling, ps_model, sigma_2_rescaling=1):
+    """
+    Compute the log likelihood of the Gaussian model (epsilon | phi).
+    """
+    eps_dim = eps.shape[-1]*eps.shape[-2]
+    ps = ps_model(phi)
+    xf = torch.fft.fft2(eps)
+    sigma_2_y = sigma_2_y.reshape(-1,1,1)
+    rescaling = rescaling.reshape(-1,1,1)
+
+    term_pi = -(eps_dim/2) * np.log(2*np.pi)
+    term_logdet = -0.5 * torch.sum(torch.log((sigma_2_y+sigma_2_rescaling*rescaling)*ps), dim=(-1, -2)) # The determinant is the product of the diagonal elements of the PS
+    term_x = -0.5 * torch.sum((torch.abs(xf).pow(2)) / ((sigma_2_y+sigma_2_rescaling*rescaling)*ps), dim=(-1, -2, -3))/eps_dim # We divide by eps_dim because of the normalization of the FFT
     return term_pi + term_logdet + term_x
